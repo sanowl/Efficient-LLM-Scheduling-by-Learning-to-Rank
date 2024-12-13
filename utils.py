@@ -1,8 +1,8 @@
 import time
-import random
 from typing import List, Tuple
 from request import Request
 import numpy as np
+import secrets
 
 class RequestGenerator:
     def __init__(self, prompt_templates: List[str], arrival_rate: float):
@@ -17,8 +17,8 @@ class RequestGenerator:
         
         requests = []
         for _ in range(num_requests):
-            prompt = random.choice(self.prompt_templates)
-            arrival_time = self.last_arrival_time + random.uniform(0, time_diff)
+            prompt = secrets.choice(self.prompt_templates)
+            arrival_time = self.last_arrival_time + secrets.SystemRandom().uniform(0, time_diff)
             requests.append(Request(prompt=prompt, arrival_time=arrival_time))
         
         self.last_arrival_time = current_time
@@ -38,7 +38,7 @@ class SimpleLLM:
 
     def generate(self, prompt: str) -> str:
         # Simulate token generation time
-        output_length = len(prompt.split()) + random.randint(10, 50)
+        output_length = len(prompt.split()) + secrets.SystemRandom().randint(10, 50)
         time.sleep(self.token_generation_time * output_length)
         
         # Generate a simple response
@@ -91,21 +91,21 @@ def generate_synthetic_data(num_samples: int) -> List[Tuple[str, int]]:
     
     data = []
     for _ in range(num_samples):
-        template = random.choice(prompt_templates)
+        template = secrets.choice(prompt_templates)
         if "{topic}" in template:
-            prompt = template.format(topic=random.choice(topics))
+            prompt = template.format(topic=secrets.choice(topics))
         elif "{topic1}" in template and "{topic2}" in template:
-            t1, t2 = random.sample(topics, 2)
+            t1, t2 = secrets.SystemRandom().sample(topics, 2)
             prompt = template.format(topic1=t1, topic2=t2)
         elif "{character}" in template and "{setting}" in template:
-            prompt = template.format(character=random.choice(characters), setting=random.choice(settings))
+            prompt = template.format(character=secrets.choice(characters), setting=secrets.choice(settings))
         elif "{category}" in template:
-            prompt = template.format(category=random.choice(categories))
+            prompt = template.format(category=secrets.choice(categories))
         elif "{process}" in template:
-            prompt = template.format(process=random.choice(processes))
+            prompt = template.format(process=secrets.choice(processes))
         
         # Simulate output length based on prompt complexity
-        output_length = len(prompt.split()) * random.randint(2, 5)
+        output_length = len(prompt.split()) * secrets.SystemRandom().randint(2, 5)
         
         data.append((prompt, output_length))
     
